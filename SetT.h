@@ -48,13 +48,13 @@ private:
 	int currBucket;											// what bucket is the iterator on?
 	mutable typename forward_list<T>::iterator bucketIter;	// the iterator of the current bucket
 	mutable typename forward_list<T>::iterator otherIter;
-	// Any other private functions and variables you want/need
+	
 };
 
 template<class T>
 int SetT<T>::getHashIndex(const T& key)
 {
-	// This is done... No touching!
+	// hash function that uses an unordered map
 	unordered_map<int, T> mapper;
 	typename unordered_map<int, T>::hasher hashFunction = mapper.hash_function();
 	return static_cast<int>(hashFunction(key) % numBuckets);
@@ -90,7 +90,7 @@ template<class T>
 SetT<T>::~SetT()
 {
 	// Loop over buckets and delete each bucket
-
+	// optional deconstructor def
 	/*
 	for (int i = 0; i < numBuckets; i++) {
 		delete buckets[i];
@@ -111,60 +111,26 @@ void SetT<T>::Add(T elem)
 	int index = SetT::getHashIndex(elem);
 	if (!Contains(elem)) {
 
-		//for (auto bucketIter = buckets[index]->begin(); bucketIter != buckets[index]->end(); ++bucketIter)
-		{
-
-			//forward_list<T> new_forward_list;
-			//cout << "reached if 0 check" << endl;
-			buckets[index]->push_front(elem);
-			numElems++;
-			//cout << "did house keeping 0 check\t" << numElems<<endl;
-
-
-			//else {
-			//	cout << "reached general case" << endl;
-			//	buckets[index]->push_front(elem);
-			//	numElems++;
-			//	//cout << "did house keeping general case\t" << numElems<<endl;
-			//}
-		}
-
+			
+		buckets[index]->push_front(elem);
+		numElems++;		
 	}
 
 
-
-
-
-	// Extra credit:  If the load factor becomes too large, change the number of buckets and rehash.
 }
 
 template<class T>
 void SetT<T>::Remove(T elem)
 {
 	// Remove elem from the set if elem in the set.
-	// Be sure to refer to the foward_list code snippet in the assignment.
+	
 	int index = SetT::getHashIndex(elem);
 	SetT<T> result;
 	if (Contains(elem)) {
 
-		//for (auto bucketIter = buckets[index]->begin(); bucketIter != buckets[index]->end(); ++bucketIter)
-		{
-
-			//forward_list<T> new_forward_list;
-			//cout << "reached if 0 check" << endl;
-			buckets[index]->remove(elem);
-			numElems--;
-			//cout << "did house keeping 0 check\t" << numElems<<endl;
-
-
-			//else {
-			//	cout << "reached general case" << endl;
-			//	buckets[index]->push_front(elem);
-			//	numElems++;
-			//	//cout << "did house keeping general case\t" << numElems<<endl;
-			//}
-		}
-
+		buckets[index]->remove(elem);
+		numElems--;
+			
 	}
 }
 
@@ -180,20 +146,12 @@ bool SetT<T>::Contains(T elem)
 			//cout << "item exists" << endl;
 			return true;
 		}
-
 	}
 
-
-	/*while (buckets[hash_index] != NULL && numElems > 0) {
-		if (buckets[hash_index] == elem) {
-			return true;
-		}
-	}*/
-	//cout << "item does not exist" << endl;
 	return false;
 
 }
-
+//optional function for rehashing
 template<class T>
 double SetT<T>::LoadFactor()
 {
@@ -211,13 +169,10 @@ template<class T>
 SetT<T> SetT<T>::operator+(const SetT& other)
 {
 	SetT<T> result;
-	//result.ResetIterator();
-	// Your code here
+	
+	
 	// This function should return the union of "this" and otherSet.
-	// It should NOT change "this" or otherSet
 
-
-	// for each bucket 
 	result.ResetIterator();
 
 	for (int i = 0; i < other.numBuckets; ++i) {
@@ -226,11 +181,11 @@ SetT<T> SetT<T>::operator+(const SetT& other)
 
 		}
 	}
-
+	// for when the current bucket is larger than the other bucket
 	for (int i = 0; i < numBuckets; ++i) {
 		for (auto bucketIter = buckets[i]->begin(); bucketIter != buckets[i]->end(); ++bucketIter) {
 
-			result.Add(*bucketIter);			// put it into result
+			result.Add(*bucketIter);			
 		}
 	}
 
@@ -242,23 +197,7 @@ template<class T>
 SetT<T> SetT<T>::operator*(const SetT& other)
 {
 	SetT<T> result;
-	// Your code here
 	// This function should return the Intersection between "this" and otherSet.
-	// It should NOT change "this" or otherSet
-
-	/*result.ResetIterator();
-	other.ResetIterator();*/
-
-	/*
-	while(result.Size() != 0 || other.numElems !=0) {
-		result.GetNextItem();
-		other.GetNextItem();
-		if(result.bucketIter[i])
-
-
-	}
-	*/
-
 
 	if (other.numElems <= numElems) {
 
@@ -270,9 +209,6 @@ SetT<T> SetT<T>::operator*(const SetT& other)
 					result.Add(*bucketIter);
 
 				}
-
-
-
 
 			}
 		}
@@ -310,14 +246,10 @@ SetT<T> SetT<T>::operator*(const SetT& other)
 	{
 		SetT<T> result;
 
-		//result.ResetIterator();
-		// Your code here
+	
 		// This function should return the Difference between "this" and otherSet.
 		// It should NOT change "this" or otherSet
 		result.ResetIterator();
-
-
-
 
 		if (other.numElems < numElems) {
 			//set B iteration
@@ -374,6 +306,7 @@ SetT<T> SetT<T>::operator*(const SetT& other)
 		return result;
 	}
 
+	// making a  deep copy
 	template<class T>
 	SetT<T> SetT<T>::operator=(const SetT & other)
 	{
@@ -489,7 +422,7 @@ SetT<T> SetT<T>::operator*(const SetT& other)
 
 	// overloaded print function for outputfile 
 	template<class T>
-	inline void SetT<T>::print_bucket(ostream & out)
+	inline void SetT<T>::print_bucket(ostream& out)
 	{
 		for (int i = 0; i < numBuckets; i++) {
 			for (bucketIter = buckets[i]->begin(); bucketIter != buckets[i]->end(); ++bucketIter) {
