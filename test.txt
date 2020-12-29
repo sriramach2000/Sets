@@ -1,0 +1,18 @@
+addA 23
+addA 56
+addA 76
+addA 87
+addA 98
+addA 45
+addA 54
+
+addB 32
+addB 23
+addB 56
+addB 12
+intersection
+
+printA
+printB
+
+quit
