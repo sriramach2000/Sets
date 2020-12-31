@@ -1,6 +1,7 @@
-// Sets.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
+/*
+Author: Sriram Acharya
+Class: CS 301
+*/
 
 #include "SetT.h"
 #include <iostream>
